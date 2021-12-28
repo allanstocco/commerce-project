@@ -1,24 +1,28 @@
-{% extends "auctions/layout.html" %}
+{% extends "auctions/layout_login.html" %}
 
 {% block body %}
+<body id="bg" style="background-image: url('https://www.verdict.co.uk/wp-content/uploads/2017/12/shutterstock_691698019-e1513702444275.jpg');">
+
 
     <h2>Login</h2>
 
     {% if message %}
-        <div>{{ message }}</div>
+    <div style="color: whitesmoke;">{{ message }}</div>
     {% endif %}
 
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+            <input autofocus class="form-control col-sm-3" type="text" name="username" placeholder="Username">
         </div>
         <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
+            <input class="form-control col-sm-3" type="password" name="password" placeholder="Password">
         </div>
         <input class="btn btn-primary" type="submit" value="Login">
     </form>
 
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    Don't have an account? <a style="color: whitesmoke;" href="{% url 'register' %}">Register here.</a>
 
+
+</body>
 {% endblock %}
