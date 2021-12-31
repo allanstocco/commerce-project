@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="form">
+    <form action="{% url 'create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{product_form}}
+        </div>
+        <input class="btn btn-sm btn-outline-secondary" type="submit" value="Submit">
+    </form>
+</div>
+
+</div>
+{% endblock %}
