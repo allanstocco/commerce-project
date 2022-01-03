@@ -1,0 +1,165 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+<div class="row mb-2">
+    <div class="col-lg-12">
+        <div
+            class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <h2>
+                    <strong class="d-inline-block mb-1 text-primary" style="text-shadow: 1px 1px">{{product.title}}
+                        <span class="d-inline-block mb-1 text-primary">
+                            <small>{% if product.status == True %}
+                                <form action="{% url 'watchlist' product_pk=product.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    {% if watchlistcheck is True %}
+                                    <button style="border: none; background-color: white;" type="submit"><i
+                                            class="fas fa-star"></i></button>
+                                    {% else %}
+                                    <button style="border: none; background-color: white;" type="submit"><i
+                                            class="far fa-star"></i>
+                                    </button>
+                                    {% endif %}
+                                </form>{% endif %}
+                            </small>
+                        </span>
+                </h2>
+                {% if product.user_seller == request.user %}
+                <div style="display:inline-block;">
+                    <a href="{% url 'edit' product.pk %}">
+                        <button class="btn btn-sm btn-outline-primary" style="box-shadow: 2px 3px">Edit</button>
+                    </a>
+                </div>
+                {% endif %}
+                <span class="d-inline-block mb-2 text-primary">
+                    {% if product.user_seller == request.user and product.status == True %}
+                    <form action="{% url 'close_bid' product_pk=product.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input class="btn btn-sm btn-outline-primary" style="box-shadow: 2px 3px" type="submit"
+                            value="Close List">
+                    </form>
+                    {% endif %}
+                </span>
+                </strong>
+                {% if product.description == None %}
+                <h3 class="mb-3">No description.</h3>
+                {% else %}
+                <h5 style="text-align: justify;" class="mb-3">{{product.description}}</h5>
+                {% endif %}
+                <div class="mb-2 text-muted">
+                    <h5>&#163;{{product.price}}</h5>
+                </div>
+                <p class="card-text mb-auto">People Bids... {% if countingBids == 1 %} <span
+                        style="color: red; font-weight: bold;">{{countingBids}}</span> Time {% else %} <span
+                        style="color: red; font-weight: bold;">{{countingBids}}</span> Times {% endif %}</p>
+                <ul class="card-text mb-auto">
+                    {% if product.higherBid == None %}
+                    -
+                    {% else %}
+                    {% for users in userListBid %}
+                    <li style="list-style-type: none;">
+                        <span style="color: rgb(15, 31, 102);">{{users.user}}</span> is
+                        bidding &#163;{{users.price}} pounds
+                    </li>
+                    {% endfor %}
+                    <br>
+                    {% endif %}
+                </ul>
+                {% if product.status == True %}
+                <small style="font-style: bold;">Posted by {{product.user_seller}}</small>
+                {% if product.bid_timer is not None %}
+                <small>Closes at: {{product.bid_timer}}</small><br>
+                {% endif %}
+                <small style="font-style: bold; color: rgba(0, 128, 0, 0.541);">Active</small>
+                {% else %}
+                <small style="font-style: bold; color: rgba(255, 0, 0, 0.815);">Closed</small>
+                {% endif %}
+            </div>
+            <div class="image" id="picture">
+                {% if product.get_picture_upload is not None %}
+                <img src="{{product.get_picture_upload}}" alt="">
+                {% else %}
+                <img src="{{product.pictureURL}}">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if product.status == False and product.higherBid.user == request.user %}
+<div class="alert alert-success">
+    <strong>Congratulations {{product.higherBid.user}}! {{product.title}} is now yours! You won the bid:
+        &#163;{{product.higherBid.price}}</strong>
+</div>
+{% elif product.status == False and product.higherBid.user is not None %}
+<div class="alert alert-success">
+    <strong>{{product.higherBid.user}} won the Product {{product.title}}!!! with a bid of
+        &#163;{{product.higherBid.price}}</strong>
+</div>
+{% elif product.status == True %}
+
+{% else %}
+<div class="alert alert-danger">
+    <strong>There were no bids for this product.</strong>
+</div>
+{% endif %}
+{% if product.status == True %}
+
+<!-- Bid Form Session -->
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert">
+        ×
+    </button>
+    <strong>{{message}}<strong>
+</div>
+{% endfor %}
+{% endif %}
+<br>
+<div>
+    <form class="form-inline" action="{% url 'product' product_pk=product.pk %}" method="post">
+        {% csrf_token %}
+        <div class="form-group mb-2">
+            <input class="btn btn-md btn-outline-secondary" type="submit" value="Bid £">
+            {{bid_form}}
+        </div>
+    </form>
+</div>
+{% endif %}
+{% if product.status == True %}
+<div class="col-md-12">
+    <div class="card-body">
+        <form action="{% url 'comments' product_pk=product.pk %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{comments_form}}
+            </div>
+            <input class="btn btn-sm btn-outline-secondary" type="submit" value="Comment">
+        </form>
+    </div>
+</div>
+</div>
+{% endif %}
+{% for comment in comments %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-body">
+            <h6 class="card-subtitle">Commented by {{comment.user}}. <span style="float: right;">Date:
+                    {{comment.time}}</span></h6>
+        </div>
+        <div class="">
+            <div class="">
+                <div class="">
+                    <p style="text-indent: 50px;">{{comment.field}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

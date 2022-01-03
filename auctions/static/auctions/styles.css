@@ -1,3 +1,96 @@
 body {
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.705);
 }
+
+#picture {
+  float: left;
+  height: 400px;
+  padding-right: 20px
+}
+.image > img {
+  object-fit: contain;
+  height: 400px;
+  float: inline-start
+}
+
+.price {
+  background-color: gainsboro;
+  font-weight: bolder;
+}
+
+.text {
+    width: 200px;
+}
+
+* {
+    box-sizing: border-box;
+  }
+  
+ 
+  .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .grid {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-gap: 15px 5px;
+  }
+
+  .descp {
+    border: 2px solid #d9d9d9;
+    width: 90%;
+    padding-left: 8px;
+    cursor:text;
+    font-weight: 200;
+    height: 100px;
+}
+
+.descp:focus {
+  outline: none;
+  border-color: #4c8bf5;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 1px 0px inset;
+}
+
+.form {
+  margin: auto;
+  width: 100%;
+  border: 3px solid grey;
+  padding: 10px;
+}
+
+.cat-a {
+  color: black;
+}
+
+#cat-ul:hover{
+  background: rgb(189, 135, 55);
+}
+
+#category:hover {
+  font-size: 103%;
+  background: #555;
+}
+
+#bg{
+  background-size: 1800px 900px;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-attachment: fixed;
+}
+
+
+
+
+  

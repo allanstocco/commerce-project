@@ -243,7 +243,6 @@ def categories(request):
     user = request.user
     categories = list(set(
         [Products.category for Products in Products.objects.all() if Products.category]))
-    print(categories)
     return render(request, "auctions/categories.html", {
         'categories': categories,
         "saveds": user.watchlist.all().count()
