@@ -187,7 +187,7 @@ def edit_listing(request, product_pk):
     itemObj = Products.objects.get(id=product_pk)
     form = ProductsForm(instance=itemObj)
     if request.method == "POST":
-        form = ProductsForm(request.POST, instance=itemObj)
+        form = ProductsForm(request.POST, request.FILES, instance=itemObj)
         if form.is_valid():            
             form.save()
             return HttpResponseRedirect(reverse("product", kwargs={'product_pk': product_pk}))
